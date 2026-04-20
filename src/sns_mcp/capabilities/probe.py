@@ -34,6 +34,7 @@ CAPABILITY_PROBES: dict[str, str] = {
     "dns": "DNS SHOW",
     "snmp": "SNMP SHOW",
     "global_policy": "FILTER GLOBAL SHOW",
+    "logs": 'LOG INFO file="filter"',
 }
 
 

@@ -40,6 +40,7 @@ def _register_all_tools(
     from .tools import system as sys_tools
     from .tools import users as user_tools
     from .tools import vpn as vpn_tools
+    from .tools import logs as log_tools
 
     # ── Device list (always available) ──
     @mcp.tool()
@@ -403,6 +404,41 @@ def _register_all_tools(
                 device_id: ID of the target device.
             """
             return user_tools.sns_auth_config_get(manager, device_id)
+
+    # ── Logs ──
+    if registry.any_device_has("logs"):
+
+        @mcp.tool()
+        def sns_logs_read(
+            device_id: str,
+            log_type: str = "filter",
+            lines: int = 100,
+        ) -> str:
+            """Fetch recent log lines from a specific firewall log file.
+
+            Args:
+                device_id: ID of the target device.
+                log_type: The log file to read (e.g., 'filter', 'alarm', 'system', 'auth').
+                lines: Number of recent lines to fetch (max 1000).
+            """
+            return log_tools.sns_logs_read(manager, device_id, log_type, lines)
+
+        @mcp.tool()
+        def sns_logs_search(
+            device_id: str,
+            log_type: str = "filter",
+            query: str = "",
+            lines: int = 100,
+        ) -> str:
+            """Search for a specific keyword in a firewall log file.
+
+            Args:
+                device_id: ID of the target device.
+                log_type: The log file to search (e.g., 'filter', 'alarm', 'system', 'auth').
+                query: The string or IP address to search for.
+                lines: Maximum number of lines to return (max 1000).
+            """
+            return log_tools.sns_logs_search(manager, device_id, log_type, query, lines)
 
 
 def create_server(
