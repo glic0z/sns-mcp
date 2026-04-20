@@ -118,11 +118,12 @@ class SNSClient:
                 port=self._port,
                 user=self._user,
                 password=self._password,
-                sslverifyhost=self._sslverifyhost,
-                sslverifypeer=self._sslverifypeer,
-                cabundle=self._cabundle or "",
+                sslverifypeer=self._verify_cert,
+                sslverifyhost=self._verify_cert,
                 timeout=self._timeout,
+                autoconnect=False,
             )
+            self._real_client.connect()
             self._connected = True
             logger.info("Connected to SNS device at %s:%d", self._host, self._port)
             return True
