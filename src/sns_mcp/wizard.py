@@ -61,13 +61,13 @@ def run_setup_wizard(config_path: str = "config/config.yaml"):
             secret_val = password
         else:
             import webbrowser
-            print(f"\n{YELLOW}Opening browser to https://{host}:{port}/auth/admin.html{RESET}")
+            print(f"\n{YELLOW}Opening browser to https://{host}:{port}/admin/admin.html{RESET}")
             print("1. Log in to your firewall.")
             print("2. Press F12 to open Developer Tools.")
             print("3. Go to the Application/Storage tab -> Cookies.")
             print("4. Copy the value of the 'SNS_webadmin' cookie.")
             try:
-                webbrowser.open(f"https://{host}:{port}/auth/admin.html")
+                webbrowser.open(f"https://{host}:{port}/admin/admin.html")
             except Exception:
                 pass
             cookie = input(f"{CYAN}Paste Cookie Value{RESET}: ").strip()
