@@ -63,6 +63,78 @@ class SNSClientProtocol(Protocol):
         ...
 
 
+class CookieSSLClient:
+    """This class is dynamically injected into the real SSLClient at runtime."""
+    
+    @staticmethod
+    def _create_patched_client(
+        host: str,
+        port: int,
+        cookie: str,
+        sslverifypeer: bool,
+        sslverifyhost: bool,
+        timeout: int,
+    ) -> Any:
+        from stormshield.sns.sslclient import SSLClient, ServerError
+        from xml.etree import ElementTree
+        import requests
+
+        class _PatchedSSLClient(SSLClient):
+            def __init__(self, *args, **kwargs):
+                self._cookie_val = kwargs.pop("cookie_val", "")
+                kwargs["password"] = "DUMMY_PASSWORD"  # Bypass MissingAuth check
+                kwargs["autoconnect"] = False
+                super().__init__(*args, **kwargs)
+
+            def connect(self):
+                """Override connect to use the cookie instead of password."""
+                self.logger.log(logging.INFO, 'Connecting to %s on port %d with cookie', self.host, self.port)
+
+                # Inject the cookie into the session
+                self.session.cookies.set("user_session_id", self._cookie_val)
+
+                # 2. Serverd session (Skip Step 1 Auth completely)
+                data = {'app': self.app, 'id': 0}
+                if self.credentials is not None:
+                    data['reqlevel'] = self.credentials
+                    
+                request = self.session.post(
+                    self.baseurl + '/api/auth/login',
+                    data=data,
+                    headers=self.headers,
+                    **self.conn_options)
+
+                self.logger.log(logging.DEBUG, request.text)
+
+                if request.status_code == requests.codes.OK:
+                    nws_node = ElementTree.fromstring(request.content)
+                    ret = int(nws_node.attrib['code'])
+                    msg = nws_node.attrib['msg']
+
+                    if ret != self.SSL_SERVERD_OK:
+                        # 02a00000 generally means Auth Failed/Expired in this context
+                        if ret in [44040192, 205]: 
+                            raise ValueError("AUTH_EXPIRED")
+                        raise ServerError("ERROR: {} {}".format(ret, msg))
+
+                    self.sessionid = nws_node.find('sessionid').text
+                    self.protocol = nws_node.find('protocol').text
+                    self.sessionlevel = nws_node.find('sessionlevel').text
+                else:
+                    raise ServerError("can't get serverd session")
+
+        return _PatchedSSLClient(
+            host=host,
+            port=port,
+            user="admin", # Default user, cookie dictates actual user
+            cookie_val=cookie,
+            sslverifypeer=sslverifypeer,
+            sslverifyhost=sslverifyhost,
+            timeout=timeout,
+        )
+
+
+
 class SNSClient:
     """Thin wrapper around the Stormshield SNS SSL client.
 
@@ -75,7 +147,8 @@ class SNSClient:
         host: str,
         port: int = 443,
         user: str = "",
-        password: str = "",
+        password: str | None = None,
+        cookie: str | None = None,
         sslverifyhost: bool = False,
         sslverifypeer: bool = False,
         cabundle: str | None = None,
@@ -87,7 +160,8 @@ class SNSClient:
             host: SNS appliance hostname or IP address.
             port: HTTPS port (default 443).
             user: Authentication username.
-            password: Authentication password.
+            password: Authentication password (optional if cookie is used).
+            cookie: Session cookie (optional if password is used).
             sslverifyhost: Whether to verify the SSL hostname.
             sslverifypeer: Whether to verify the SSL peer certificate.
             cabundle: Path to CA bundle PEM file.
@@ -97,6 +171,7 @@ class SNSClient:
         self._port = port
         self._user = user
         self._password = password
+        self._cookie = cookie
         self._sslverifyhost = sslverifyhost
         self._sslverifypeer = sslverifypeer
         self._cabundle = cabundle
@@ -113,20 +188,38 @@ class SNSClient:
         try:
             from stormshield.sns.sslclient import SSLClient
 
-            self._real_client = SSLClient(
-                host=self._host,
-                port=self._port,
-                user=self._user,
-                password=self._password,
-                sslverifypeer=self._sslverifypeer,
-                sslverifyhost=self._sslverifyhost,
-                timeout=self._timeout,
-                autoconnect=False,
-            )
+            if self._cookie:
+                self._real_client = CookieSSLClient._create_patched_client(
+                    host=self._host,
+                    port=self._port,
+                    cookie=self._cookie,
+                    sslverifypeer=self._sslverifypeer,
+                    sslverifyhost=self._sslverifyhost,
+                    timeout=self._timeout,
+                )
+            else:
+                self._real_client = SSLClient(
+                    host=self._host,
+                    port=self._port,
+                    user=self._user,
+                    password=self._password,
+                    sslverifypeer=self._sslverifypeer,
+                    sslverifyhost=self._sslverifyhost,
+                    timeout=self._timeout,
+                    autoconnect=False,
+                )
+            
             self._real_client.connect()
             self._connected = True
-            logger.info("Connected to SNS device at %s:%d", self._host, self._port)
+            auth_method = "cookie" if self._cookie else "password"
+            logger.info("Connected to SNS device at %s:%d using %s", self._host, self._port, auth_method)
             return True
+        except ValueError as exc:
+            if str(exc) == "AUTH_EXPIRED":
+                logger.error("Authentication expired for %s:%d. User must re-authenticate.", self._host, self._port)
+                # We raise this specific string so the executor can catch it and inform the AI
+                raise ValueError("AUTH_EXPIRED") from exc
+            return False
         except ImportError:
             logger.warning("stormshield.sns.sslclient not available — running in mock/test mode")
             self._connected = False

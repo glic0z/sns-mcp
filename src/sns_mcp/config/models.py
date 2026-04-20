@@ -13,14 +13,15 @@ from pydantic import BaseModel, Field, field_validator, model_validator
 class DeviceConfig(BaseModel):
     """Configuration for a single SNS device connection."""
 
-    host: str
-    port: int = 443
-    user: str
-    password: str
-    ssl_verify_host: bool = False
-    ssl_verify_peer: bool = False
+    host: str = Field(..., description="Hostname or IP address of the SNS device")
+    port: int = Field(443, description="Admin port (default 443)")
+    user: str = Field("admin", description="Admin username")
+    password: str | None = Field(None, description="Admin password (mutually exclusive with cookie)")
+    cookie: str | None = Field(None, description="Session cookie (mutually exclusive with password)")
+    ssl_verify_host: bool = Field(True, description="Verify SSL hostname")
+    ssl_verify_peer: bool = Field(True, description="Verify SSL CA")
     cabundle: str | None = None
-    timeout: int = 30
+    timeout: int = Field(30, description="Connection timeout in seconds")
     firmware_hint: Literal["3", "4", "5"] | None = None
     description: str = ""
     tags: list[str] = Field(default_factory=list)

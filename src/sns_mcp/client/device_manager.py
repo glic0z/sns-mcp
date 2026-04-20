@@ -91,21 +91,22 @@ class DeviceManager:
             del self._clients[device_id]
 
         # Create new client
-        device_cfg = self._config.devices[device_id]
+        dev_config = self._config.devices[device_id]
         client = SNSClient(
-            host=device_cfg.host,
-            port=device_cfg.port,
-            user=device_cfg.user,
-            password=device_cfg.password,
-            sslverifyhost=device_cfg.ssl_verify_host,
-            sslverifypeer=device_cfg.ssl_verify_peer,
-            cabundle=device_cfg.cabundle,
-            timeout=device_cfg.timeout,
+            host=dev_config.host,
+            port=dev_config.port,
+            user=dev_config.user,
+            password=dev_config.password,
+            cookie=dev_config.cookie,
+            sslverifyhost=dev_config.ssl_verify_host,
+            sslverifypeer=dev_config.ssl_verify_peer,
+            cabundle=dev_config.cabundle,
+            timeout=dev_config.timeout,
         )
 
         if not client.connect():
             raise DeviceUnreachableError(
-                device_id, f"Failed to connect to {device_cfg.host}:{device_cfg.port}"
+                device_id, f"Failed to connect to {dev_config.host}:{dev_config.port}"
             )
 
         self._clients[device_id] = client

@@ -45,24 +45,61 @@ def run_setup_wizard(config_path: str = "config/config.yaml"):
         port = int(port_str) if port_str.isdigit() else 443
         
         user = input(f"{CYAN}Username{RESET} [admin]: ").strip() or "admin"
-        password = input(f"{CYAN}Password{RESET}: ").strip()
         
-        env_var_name = f"SNS_PASSWORD_{dev_id.upper()}"
+        print(f"\n{CYAN}Authentication Method:{RESET}")
+        print("  [1] Password (Traditional)")
+        print("  [2] Browser Cookie (More Secure, no password stored)")
+        auth_choice = input(f"Select [1]: ").strip() or "1"
+
+        auth_method = "cookie" if auth_choice == "2" else "password"
+        password = None
+        cookie = None
+
+        if auth_method == "password":
+            password = input(f"{CYAN}Password{RESET}: ").strip()
+            env_var_name = f"SNS_PASSWORD_{dev_id.upper()}"
+            secret_val = password
+        else:
+            import webbrowser
+            print(f"\n{YELLOW}Opening browser to https://{host}:{port}/auth/admin.html{RESET}")
+            print("1. Log in to your firewall.")
+            print("2. Press F12 to open Developer Tools.")
+            print("3. Go to the Application/Storage tab -> Cookies.")
+            print("4. Copy the value of the 'user_session_id' cookie.")
+            try:
+                webbrowser.open(f"https://{host}:{port}/auth/admin.html")
+            except Exception:
+                pass
+            cookie = input(f"{CYAN}Paste Cookie Value{RESET}: ").strip()
+            env_var_name = f"SNS_COOKIE_{dev_id.upper()}"
+            secret_val = cookie
         
         print(f"\n{YELLOW}Testing connection to {host}:{port}...{RESET}")
         
         try:
             from stormshield.sns.sslclient import SSLClient
-            client = SSLClient(
-                host=host,
-                port=port,
-                user=user,
-                password=password,
-                sslverifypeer=False,
-                sslverifyhost=False,
-                timeout=10,
-                autoconnect=False
-            )
+            from .client.sns_client import CookieSSLClient
+            
+            if auth_method == "cookie":
+                client = CookieSSLClient._create_patched_client(
+                    host=host,
+                    port=port,
+                    cookie=cookie,
+                    sslverifypeer=False,
+                    sslverifyhost=False,
+                    timeout=10,
+                )
+            else:
+                client = SSLClient(
+                    host=host,
+                    port=port,
+                    user=user,
+                    password=password,
+                    sslverifypeer=False,
+                    sslverifyhost=False,
+                    timeout=10,
+                    autoconnect=False
+                )
             if client.connect():
                 print(f"{GREEN}✓ Connection successful!{RESET}")
                 try:
@@ -74,6 +111,14 @@ def run_setup_wizard(config_path: str = "config/config.yaml"):
                 retry = input(f"Do you want to add this device anyway? (y/N): ").strip().lower()
                 if retry != 'y':
                     continue
+        except ValueError as e:
+            if str(e) == "AUTH_EXPIRED":
+                print(f"{RED}✗ Connection failed: Cookie is expired or invalid!{RESET}")
+            else:
+                print(f"{RED}✗ Error: {e}{RESET}")
+            retry = input(f"Do you want to add this device anyway? (y/N): ").strip().lower()
+            if retry != 'y':
+                continue
         except Exception as e:
             print(f"{RED}✗ Error during connection test: {e}{RESET}")
             retry = input(f"Do you want to add this device anyway? (y/N): ").strip().lower()
@@ -88,23 +133,28 @@ def run_setup_wizard(config_path: str = "config/config.yaml"):
         
         # Remove old env var if exists, then append
         env_lines = [line for line in env_lines if not line.startswith(f"{env_var_name}=")]
-        env_lines.append(f'{env_var_name}="{password}"\n')
+        env_lines.append(f'{env_var_name}="{secret_val}"\n')
         
         with open(env_file, "w") as f:
             f.writelines(env_lines)
             
-        print(f"{GREEN}✓ Saved password to .env as {env_var_name}{RESET}")
+        print(f"{GREEN}✓ Saved secret to .env as {env_var_name}{RESET}")
 
         # Update config
-        config["devices"][dev_id] = {
+        device_entry = {
             "host": host,
             "port": port,
             "user": user,
-            "password": f"${{{env_var_name}}}",
             "ssl_verify_host": False,
             "ssl_verify_peer": False,
             "timeout": 30
         }
+        if auth_method == "cookie":
+            device_entry["cookie"] = f"${{{env_var_name}}}"
+        else:
+            device_entry["password"] = f"${{{env_var_name}}}"
+            
+        config["devices"][dev_id] = device_entry
         
         config_file.parent.mkdir(parents=True, exist_ok=True)
         with open(config_file, "w") as f:
