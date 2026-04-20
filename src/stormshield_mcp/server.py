@@ -525,12 +525,22 @@ def parse_args(args: list[str] | None = None) -> argparse.Namespace:
         default=None,
         help="Override log level",
     )
+    parser.add_argument(
+        "--setup",
+        action="store_true",
+        help="Run the interactive configuration wizard",
+    )
     return parser.parse_args(args)
 
 
 def main_sync() -> None:
     """Synchronous entry point for the MCP server."""
     args = parse_args()
+
+    if args.setup:
+        from .wizard import run_setup_wizard
+        run_setup_wizard(args.config or "config/config.yaml")
+        return
 
     if args.transport == "http":
         from .server_http import run_http
@@ -539,19 +549,25 @@ def main_sync() -> None:
     else:
         mcp, manager = create_server(args.config, args.log_level)
         try:
+            CYAN = "\033[96m"
+            BLUE = "\033[94m"
+            MAGENTA = "\033[95m"
+            RED = "\033[91m"
+            RESET = "\033[0m"
             print(
-                "\n+-----------------------------------------------------------------------------+\n"
-                "|                                                                             |\n"
-                "|   ███████╗███╗   ██╗███████╗    ███╗   ███╗ ██████╗██████╗                  |\n"
-                "|   ██╔════╝████╗  ██║██╔════╝    ████╗ ████║██╔════╝██╔══██╗                 |\n"
-                "|   ███████╗██╔██╗ ██║███████╗    ██╔████╔██║██║     ██████╔╝                 |\n"
-                "|   ╚════██║██║╚██╗██║╚════██║    ██║╚██╔╝██║██║     ██╔═══╝                  |\n"
-                "|   ███████║██║ ╚████║███████║    ██║ ╚═╝ ██║╚██████╗██║                      |\n"
-                "|   ╚══════╝╚═╝  ╚═══╝╚══════╝    ╚═╝     ╚═╝ ╚═════╝╚═╝                      |\n"
-                "|                                                                             |\n"
-                "|                    Stormshield Network Security MCP Server                  |\n"
-                "|                                                                             |\n"
-                "+-----------------------------------------------------------------------------+\n",
+                f"\n{CYAN}+-----------------------------------------------------------------------------+{RESET}\n"
+                f"{CYAN}|{RESET}                                                                             {CYAN}|{RESET}\n"
+                f"{CYAN}|{RESET}   {BLUE}███████╗███╗   ██╗███████╗    ███╗   ███╗ ██████╗██████╗{RESET}                  {CYAN}|{RESET}\n"
+                f"{CYAN}|{RESET}   {BLUE}██╔════╝████╗  ██║██╔════╝    ████╗ ████║██╔════╝██╔══██╗{RESET}                 {CYAN}|{RESET}\n"
+                f"{CYAN}|{RESET}   {BLUE}███████╗██╔██╗ ██║███████╗    ██╔████╔██║██║     ██████╔╝{RESET}                 {CYAN}|{RESET}\n"
+                f"{CYAN}|{RESET}   {BLUE}╚════██║██║╚██╗██║╚════██║    ██║╚██╔╝██║██║     ██╔═══╝ {RESET}                 {CYAN}|{RESET}\n"
+                f"{CYAN}|{RESET}   {BLUE}███████║██║ ╚████║███████║    ██║ ╚═╝ ██║╚██████╗██║     {RESET}                 {CYAN}|{RESET}\n"
+                f"{CYAN}|{RESET}   {BLUE}╚══════╝╚═╝  ╚═══╝╚══════╝    ╚═╝     ╚═╝ ╚═════╝╚═╝     {RESET}                 {CYAN}|{RESET}\n"
+                f"{CYAN}|{RESET}                                                                             {CYAN}|{RESET}\n"
+                f"{CYAN}|{RESET}                    {MAGENTA}Stormshield Network Security MCP Server{RESET}                  {CYAN}|{RESET}\n"
+                f"{CYAN}|{RESET}                                                                             {CYAN}|{RESET}\n"
+                f"{CYAN}|{RESET}                   Built by glicoz and claude with love {RED}❤{RESET}                    {CYAN}|{RESET}\n"
+                f"{CYAN}+-----------------------------------------------------------------------------+{RESET}\n",
                 flush=True
             )
             mcp.run(show_banner=False)

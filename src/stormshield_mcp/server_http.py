@@ -25,19 +25,25 @@ def run_http(
     mcp, manager = create_server(config_path, log_level)
 
     try:
+        CYAN = "\033[96m"
+        BLUE = "\033[94m"
+        MAGENTA = "\033[95m"
+        RED = "\033[91m"
+        RESET = "\033[0m"
         print(
-            "\n+-----------------------------------------------------------------------------+\n"
-            "|                                                                             |\n"
-            "|   ███████╗███╗   ██╗███████╗    ███╗   ███╗ ██████╗██████╗                  |\n"
-            "|   ██╔════╝████╗  ██║██╔════╝    ████╗ ████║██╔════╝██╔══██╗                 |\n"
-            "|   ███████╗██╔██╗ ██║███████╗    ██╔████╔██║██║     ██████╔╝                 |\n"
-            "|   ╚════██║██║╚██╗██║╚════██║    ██║╚██╔╝██║██║     ██╔═══╝                  |\n"
-            "|   ███████║██║ ╚████║███████║    ██║ ╚═╝ ██║╚██████╗██║                      |\n"
-            "|   ╚══════╝╚═╝  ╚═══╝╚══════╝    ╚═╝     ╚═╝ ╚═════╝╚═╝                      |\n"
-            "|                                                                             |\n"
-            "|                    Stormshield Network Security MCP Server                  |\n"
-            "|                                                                             |\n"
-            "+-----------------------------------------------------------------------------+\n",
+            f"\n{CYAN}+-----------------------------------------------------------------------------+{RESET}\n"
+            f"{CYAN}|{RESET}                                                                             {CYAN}|{RESET}\n"
+            f"{CYAN}|{RESET}   {BLUE}███████╗███╗   ██╗███████╗    ███╗   ███╗ ██████╗██████╗{RESET}                  {CYAN}|{RESET}\n"
+            f"{CYAN}|{RESET}   {BLUE}██╔════╝████╗  ██║██╔════╝    ████╗ ████║██╔════╝██╔══██╗{RESET}                 {CYAN}|{RESET}\n"
+            f"{CYAN}|{RESET}   {BLUE}███████╗██╔██╗ ██║███████╗    ██╔████╔██║██║     ██████╔╝{RESET}                 {CYAN}|{RESET}\n"
+            f"{CYAN}|{RESET}   {BLUE}╚════██║██║╚██╗██║╚════██║    ██║╚██╔╝██║██║     ██╔═══╝ {RESET}                 {CYAN}|{RESET}\n"
+            f"{CYAN}|{RESET}   {BLUE}███████║██║ ╚████║███████║    ██║ ╚═╝ ██║╚██████╗██║     {RESET}                 {CYAN}|{RESET}\n"
+            f"{CYAN}|{RESET}   {BLUE}╚══════╝╚═╝  ╚═══╝╚══════╝    ╚═╝     ╚═╝ ╚═════╝╚═╝     {RESET}                 {CYAN}|{RESET}\n"
+            f"{CYAN}|{RESET}                                                                             {CYAN}|{RESET}\n"
+            f"{CYAN}|{RESET}                    {MAGENTA}Stormshield Network Security MCP Server{RESET}                  {CYAN}|{RESET}\n"
+            f"{CYAN}|{RESET}                                                                             {CYAN}|{RESET}\n"
+            f"{CYAN}|{RESET}                   Built by glicoz and claude with love {RED}❤{RESET}                    {CYAN}|{RESET}\n"
+            f"{CYAN}+-----------------------------------------------------------------------------+{RESET}\n",
             flush=True
         )
         mcp.run(
