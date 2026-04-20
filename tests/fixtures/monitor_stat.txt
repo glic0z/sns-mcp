@@ -1,0 +1,8 @@
+101 code=00a01000 msg="Begin" format="section"
+[Result]
+CPU=12
+Mem=45
+Connections=3241
+ConnRate=18
+Hosts=156
+100 code=00a00100 msg="Ok"

@@ -1,0 +1,13 @@
+101 code=00a01000 msg="Begin" format="section_line"
+[Result]
+name=rule_allow_http action=pass srchost=Network_LAN srciface=eth0 dsthost=srv_web dstiface=eth1 dstserv=http status=on rank=1 schedule=always inspection=IPS_00 log=log comment="Allow HTTP to web server"
+name=rule_allow_https action=pass srchost=Network_LAN srciface=eth0 dsthost=srv_web dstiface=eth1 dstserv=https status=on rank=2 schedule=always inspection=IPS_00 log=log comment="Allow HTTPS to web server"
+name=rule_block_telnet action=block srchost=any srciface=any dsthost=any dstiface=any dstserv=telnet status=on rank=3 schedule=always inspection= log=log comment="Block all telnet"
+name=rule_allow_dns action=pass srchost=Network_LAN srciface=eth0 dsthost=dns_servers dstiface=eth1 dstserv=dns_udp status=on rank=4 schedule=always inspection= log=minor comment="Allow DNS resolution"
+name=rule_allow_smtp action=pass srchost=srv_mail srciface=eth1 dsthost=any dstiface=eth2 dstserv=smtp status=on rank=5 schedule=business_hours inspection=IPS_01 log=log comment="Mail server outbound SMTP"
+name=rule_allow_vpn_users action=pass srchost=VPN_Pool srciface=tun0 dsthost=Network_Internal dstiface=eth0 dstserv=any status=on rank=6 schedule=always inspection=IPS_00 log=log comment="VPN users to internal"
+name=rule_nat_masq action=pass srchost=Network_LAN srciface=eth0 dsthost=any dstiface=eth2 dstserv=any status=on rank=7 schedule=always inspection= nat=masquerade log=minor comment="Internet access with masquerade"
+name=rule_allow_icmp action=pass srchost=any srciface=any dsthost=firewall_out dstiface=any dstserv=icmp status=on rank=8 schedule=always inspection= log=minor comment="Allow ICMP to firewall"
+name=rule_block_p2p action=block srchost=Network_LAN srciface=eth0 dsthost=any dstiface=eth2 dstserv=any status=on rank=9 schedule=always inspection=IPS_00 log=log comment="Block P2P applications" srcuser=
+name=rule_default_deny action=block srchost=any srciface=any dsthost=any dstiface=any dstserv=any status=on rank=10 schedule=always inspection= log=log comment="Default deny all"
+100 code=00a00100 msg="Ok"

@@ -1,0 +1,9 @@
+101 code=00a01000 msg="Begin" format="section"
+[Result]
+Model=SN710
+Version=4.3.22
+Serial=U70XXSN71012345
+Hostname=paris-fw-01
+Uptime=45d 12h 34m
+BuildDate=2025-11-15
+100 code=00a00100 msg="Ok"

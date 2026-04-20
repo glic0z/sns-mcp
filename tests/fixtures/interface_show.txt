@@ -1,0 +1,7 @@
+101 code=00a01000 msg="Begin" format="section_line"
+[Result]
+name=eth0 type=ethernet status=up ip=192.168.1.254 mask=255.255.255.0 mac=00:1a:2b:3c:4d:01 speed=1000 mtu=1500 zone=in comment="LAN interface"
+name=eth1 type=ethernet status=up ip=172.16.0.254 mask=255.255.0.0 mac=00:1a:2b:3c:4d:02 speed=1000 mtu=1500 zone=dmz comment="DMZ interface"
+name=eth2 type=ethernet status=down ip= mask= mac=00:1a:2b:3c:4d:03 speed= mtu=1500 zone= comment="Unused interface"
+name=vlan10 type=vlan status=up ip=10.10.10.1 mask=255.255.255.0 mac=00:1a:2b:3c:4d:01 speed= mtu=1500 zone=servers vlanid=10 comment="Server VLAN"
+100 code=00a00100 msg="Ok"

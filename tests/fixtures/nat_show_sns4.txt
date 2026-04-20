@@ -1,0 +1,8 @@
+101 code=00a01000 msg="Begin" format="section_line"
+[Result]
+name=nat_web_http origsrc=any origdst=Firewall_out origport=80 transsrc= transdst=srv_web transport=80 proto=tcp iface=eth2 status=on rank=1 comment="Inbound HTTP to web server"
+name=nat_web_https origsrc=any origdst=Firewall_out origport=443 transsrc= transdst=srv_web transport=443 proto=tcp iface=eth2 status=on rank=2 comment="Inbound HTTPS to web server"
+name=nat_mail_smtp origsrc=any origdst=Firewall_out origport=25 transsrc= transdst=srv_mail transport=25 proto=tcp iface=eth2 status=on rank=3 comment="Inbound SMTP to mail server"
+name=nat_masq_lan origsrc=Network_LAN origdst=any origport=any transsrc=Firewall_out transdst= transport= proto=any iface=eth2 status=on rank=4 comment="LAN masquerade for internet"
+name=nat_vpn_pool origsrc=VPN_Pool origdst=any origport=any transsrc=Firewall_out transdst= transport= proto=any iface=eth2 status=off rank=5 comment="VPN pool masquerade (disabled)"
+100 code=00a00100 msg="Ok"

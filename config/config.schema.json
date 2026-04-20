@@ -1,0 +1,54 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "stormshield-mcp configuration",
+  "type": "object",
+  "required": ["devices"],
+  "properties": {
+    "devices": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": {
+        "type": "object",
+        "required": ["host", "user", "password"],
+        "properties": {
+          "host": {"type": "string"},
+          "port": {"type": "integer", "default": 443},
+          "user": {"type": "string"},
+          "password": {"type": "string"},
+          "ssl_verify_host": {"type": "boolean", "default": false},
+          "ssl_verify_peer": {"type": "boolean", "default": false},
+          "cabundle": {"type": ["string", "null"], "default": null},
+          "timeout": {"type": "integer", "minimum": 5, "maximum": 300, "default": 30},
+          "firmware_hint": {"type": ["string", "null"], "enum": ["3", "4", "5", null]},
+          "description": {"type": "string", "default": ""},
+          "tags": {"type": "array", "items": {"type": "string"}, "default": []}
+        }
+      }
+    },
+    "server": {
+      "type": "object",
+      "properties": {
+        "name": {"type": "string", "default": "stormshield-mcp"},
+        "version": {"type": "string", "default": "0.1.0"},
+        "host": {"type": "string", "default": "127.0.0.1"},
+        "port": {"type": "integer", "default": 8765},
+        "path": {"type": "string", "default": "/mcp"}
+      }
+    },
+    "capabilities": {
+      "type": "object",
+      "properties": {
+        "probe_on_start": {"type": "boolean", "default": true},
+        "probe_timeout": {"type": "integer", "default": 10}
+      }
+    },
+    "logging": {
+      "type": "object",
+      "properties": {
+        "level": {"type": "string", "enum": ["DEBUG", "INFO", "WARNING", "ERROR"], "default": "INFO"},
+        "format": {"type": "string", "enum": ["json", "text"], "default": "json"},
+        "file": {"type": ["string", "null"], "default": null}
+      }
+    }
+  }
+}

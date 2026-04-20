@@ -1,0 +1,7 @@
+101 code=00a01000 msg="Begin" format="section_line"
+[Result]
+dst=0.0.0.0 mask=0.0.0.0 gw=203.0.113.1 iface=eth2 metric=0 type=static comment="Default route"
+dst=10.0.0.0 mask=255.0.0.0 gw=192.168.1.1 iface=eth0 metric=10 type=static comment="Internal networks via LAN"
+dst=172.16.0.0 mask=255.255.0.0 gw=0.0.0.0 iface=eth1 metric=0 type=connected comment="DMZ directly connected"
+dst=192.168.1.0 mask=255.255.255.0 gw=0.0.0.0 iface=eth0 metric=0 type=connected comment="LAN directly connected"
+100 code=00a00100 msg="Ok"

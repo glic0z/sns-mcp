@@ -1,0 +1,11 @@
+101 code=00a01000 msg="Begin" format="section_line"
+[Result]
+name=srv_web type=host ip=192.168.1.10 mask=255.255.255.255 comment="Web server" builtin=0 color=
+name=srv_mail type=host ip=192.168.1.20 mask=255.255.255.255 comment="Mail server" builtin=0 color=
+name=srv_dns1 type=host ip=10.0.0.53 mask=255.255.255.255 comment="Primary DNS" builtin=0 color=
+name=srv_dns2 type=host ip=10.0.0.54 mask=255.255.255.255 comment="Secondary DNS" builtin=0 color=
+name=gw_isp type=host ip=203.0.113.1 mask=255.255.255.255 comment="ISP gateway" builtin=0 color=
+name=Firewall_out type=host ip=203.0.113.10 mask=255.255.255.255 comment="Firewall external IP" builtin=1 color=
+name=srv_proxy type=host ip=192.168.1.30 mask=255.255.255.255 comment="Proxy server" builtin=0 color=
+name=srv_monitoring type=host ip=192.168.1.40 mask=255.255.255.255 comment="Nagios monitoring" builtin=0 color=
+100 code=00a00100 msg="Ok"

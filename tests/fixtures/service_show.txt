@@ -1,0 +1,9 @@
+101 code=00a01000 msg="Begin" format="section_line"
+[Result]
+name=http proto=tcp port=80 comment="HTTP" builtin=1
+name=https proto=tcp port=443 comment="HTTPS" builtin=1
+name=smtp proto=tcp port=25 comment="SMTP" builtin=1
+name=dns_udp proto=udp port=53 comment="DNS UDP" builtin=1
+name=ssh proto=tcp port=22 comment="SSH" builtin=1
+name=icmp proto=icmp port= comment="ICMP" builtin=1
+100 code=00a00100 msg="Ok"

@@ -1,0 +1,7 @@
+101 code=00a01000 msg="Begin" format="section_line"
+[Result]
+name=Network_LAN type=network ip=192.168.1.0 mask=255.255.255.0 comment="Local LAN" builtin=0 color=
+name=Network_Internal type=network ip=10.0.0.0 mask=255.0.0.0 comment="Internal RFC1918" builtin=0 color=
+name=Network_DMZ type=network ip=172.16.0.0 mask=255.255.0.0 comment="DMZ network" builtin=0 color=
+name=VPN_Pool type=network ip=10.8.0.0 mask=255.255.255.0 comment="VPN client pool" builtin=0 color=
+100 code=00a00100 msg="Ok"

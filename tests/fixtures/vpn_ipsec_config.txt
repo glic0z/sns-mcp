@@ -1,0 +1,5 @@
+101 code=00a01000 msg="Begin" format="section_line"
+[Result]
+name=peer_paris_lyon peer=198.51.100.1 local=203.0.113.10 remote=198.51.100.1 auth=psk ikeversion=2 enc=aes256 hash=sha256 dhgroup=14 lifetime=28800 localnet=192.168.1.0/24 remotenet=192.168.2.0/24 status=on comment="Paris to Lyon site-to-site"
+name=peer_paris_london peer=198.51.100.50 local=203.0.113.10 remote=198.51.100.50 auth=certificate ikeversion=2 enc=aes256-gcm hash=sha384 dhgroup=20 lifetime=86400 localnet=192.168.1.0/24 remotenet=10.20.0.0/16 status=on comment="Paris to London site-to-site"
+100 code=00a00100 msg="Ok"

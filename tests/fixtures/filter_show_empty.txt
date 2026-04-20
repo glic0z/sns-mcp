@@ -1,0 +1,3 @@
+101 code=00a01000 msg="Begin" format="section_line"
+[Result]
+100 code=00a00100 msg="Ok"

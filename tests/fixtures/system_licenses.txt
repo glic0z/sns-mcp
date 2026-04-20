@@ -1,0 +1,8 @@
+101 code=00a01000 msg="Begin" format="section_line"
+[Result]
+module=IPS status=active expiry=2027-04-20 remaining=365
+module=Antivirus status=expired expiry=2026-01-15 remaining=-95
+module=URL_Filtering status=missing expiry= remaining=
+module=AntiSpam status=active expiry=2027-04-20 remaining=365
+module=Industrial status=active expiry=2027-04-20 remaining=365
+100 code=00a00100 msg="Ok"

@@ -1,0 +1,5 @@
+101 code=00a01000 msg="Begin" format="section_line"
+[Result]
+peer=198.51.100.1 state=established localnet=192.168.1.0/24 remotenet=192.168.2.0/24 enc=aes256 bytesin=1048576 bytesout=524288 created=2026-04-20T08:00:00Z remaining=25200
+peer=198.51.100.50 state=down localnet=192.168.1.0/24 remotenet=10.20.0.0/16 enc=aes256-gcm bytesin=0 bytesout=0 created= remaining=
+100 code=00a00100 msg="Ok"

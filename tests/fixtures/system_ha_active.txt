@@ -1,0 +1,10 @@
+101 code=00a01000 msg="Begin" format="section"
+[Result]
+state=active
+mode=active-passive
+role=active
+peerserial=U70XXSN71012346
+peerversion=4.3.22
+sync=synchronized
+quality=100
+100 code=00a00100 msg="Ok"

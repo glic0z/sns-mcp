@@ -1,0 +1,53 @@
+# stormshield-mcp configuration
+# Copy to config.yaml and set chmod 600 config.yaml
+
+devices:
+  # Device ID — used in every MCP tool call as 'device_id'
+  # Choose a meaningful name: site name, hostname, role
+  paris-fw-01:
+    host: "192.168.1.1"
+    port: 443                            # default: 443
+    user: "api_monitor"                  # dedicated read-only user
+    password: "${PARIS_FW_PASSWORD}"     # env var injection supported
+    ssl_verify_host: false               # set true in production with valid cert
+    ssl_verify_peer: false               # set true with cabundle
+    cabundle: null                       # path to CA bundle PEM (optional)
+    timeout: 30                          # seconds per command
+    firmware_hint: "4"                   # optional: "3", "4", "5" — skips auto-detect
+    description: "Paris HQ edge firewall"
+    tags:                                # optional: free-form tags for filtering
+      - production
+      - edge
+
+  lyon-dr-01:
+    host: "10.20.0.1"
+    port: 443
+    user: "api_monitor"
+    password: "${LYON_FW_PASSWORD}"
+    ssl_verify_host: false
+    ssl_verify_peer: false
+    timeout: 30
+    description: "Lyon DR site firewall"
+    tags:
+      - dr
+      - edge
+
+server:
+  name: "stormshield-mcp"
+  version: "0.1.0"
+  # HTTP transport settings (server_http.py only)
+  host: "127.0.0.1"                      # NEVER expose on 0.0.0.0 without auth
+  port: 8765
+  path: "/mcp"
+
+capabilities:
+  # If probe_on_start is true, the server will test each command at startup
+  # and disable tools for features not available on the device.
+  # Set to false if devices are slow or unreliable at startup.
+  probe_on_start: true
+  probe_timeout: 10                      # seconds per probe command
+
+logging:
+  level: "INFO"                          # DEBUG, INFO, WARNING, ERROR
+  format: "json"                         # "json" or "text"
+  file: null                             # path to log file, null = stdout only
