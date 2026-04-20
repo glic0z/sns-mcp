@@ -90,6 +90,9 @@ class CookieSSLClient:
                 """Override connect to use the cookie instead of password."""
                 self.logger.log(logging.INFO, 'Connecting to %s on port %d with cookie', self.host, self.port)
 
+                # The browser generates a cookie for the 'webadmin' application
+                self.app = 'webadmin'
+                
                 # Inject the cookie into the session
                 self.session.cookies.set("SNS_webadmin", self._cookie_val)
 
