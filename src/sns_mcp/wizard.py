@@ -46,84 +46,95 @@ def run_setup_wizard(config_path: str = "config/config.yaml"):
         
         user = input(f"{CYAN}Username{RESET} [admin]: ").strip() or "admin"
         
-        print(f"\n{CYAN}Authentication Method:{RESET}")
-        print("  [1] Password (Traditional)")
-        print("  [2] Browser Cookie (More Secure, no password stored)")
-        auth_choice = input(f"Select [1]: ").strip() or "1"
+        skip_device = False
+        while True:
+            print(f"\n{CYAN}Authentication Method:{RESET}")
+            print("  [1] Password (Traditional)")
+            print("  [2] Browser Cookie (More Secure, no password stored)")
+            auth_choice = input(f"Select [1]: ").strip() or "1"
 
-        auth_method = "cookie" if auth_choice == "2" else "password"
-        password = None
-        cookie = None
+            auth_method = "cookie" if auth_choice == "2" else "password"
+            password = None
+            cookie = None
 
-        if auth_method == "password":
-            password = input(f"{CYAN}Password{RESET}: ").strip()
-            env_var_name = f"SNS_PASSWORD_{dev_id.upper()}"
-            secret_val = password
-        else:
-            import webbrowser
-            print(f"\n{YELLOW}Opening browser to https://{host}:{port}/admin/admin.html{RESET}")
-            print("1. Log in to your firewall.")
-            print("2. Press F12 to open Developer Tools.")
-            print("3. Go to the Application/Storage tab -> Cookies.")
-            print("4. Copy the value of the 'SNS_webadmin' cookie.")
-            try:
-                webbrowser.open(f"https://{host}:{port}/admin/admin.html")
-            except Exception:
-                pass
-            cookie = input(f"{CYAN}Paste Cookie Value{RESET}: ").strip()
-            env_var_name = f"SNS_COOKIE_{dev_id.upper()}"
-            secret_val = cookie
-        
-        print(f"\n{YELLOW}Testing connection to {host}:{port}...{RESET}")
-        
-        try:
-            from stormshield.sns.sslclient import SSLClient
-            from .client.sns_client import CookieSSLClient
-            
-            if auth_method == "cookie":
-                client = CookieSSLClient._create_patched_client(
-                    host=host,
-                    port=port,
-                    cookie=cookie,
-                    sslverifypeer=False,
-                    sslverifyhost=False,
-                    timeout=10,
-                )
+            if auth_method == "password":
+                password = input(f"{CYAN}Password{RESET}: ").strip()
+                env_var_name = f"SNS_PASSWORD_{dev_id.upper()}"
+                secret_val = password
             else:
-                client = SSLClient(
-                    host=host,
-                    port=port,
-                    user=user,
-                    password=password,
-                    sslverifypeer=False,
-                    sslverifyhost=False,
-                    timeout=10,
-                    autoconnect=False
-                )
-            if client.connect():
-                print(f"{GREEN}✓ Connection successful!{RESET}")
+                import webbrowser
+                print(f"\n{YELLOW}Opening browser to https://{host}:{port}/admin/admin.html{RESET}")
+                print("1. Log in to your firewall.")
+                print("2. Press F12 to open Developer Tools.")
+                print("3. Go to the Application/Storage tab -> Cookies.")
+                print("4. Copy the value of the 'SNS_webadmin' cookie.")
                 try:
-                    client.disconnect()
+                    webbrowser.open(f"https://{host}:{port}/admin/admin.html")
                 except Exception:
                     pass
-            else:
-                print(f"{RED}✗ Connection failed!{RESET}")
-                retry = input(f"Do you want to add this device anyway? (y/N): ").strip().lower()
-                if retry != 'y':
-                    continue
-        except ValueError as e:
-            if str(e) == "AUTH_EXPIRED":
-                print(f"{RED}✗ Connection failed: Cookie is expired or invalid!{RESET}")
-            else:
-                print(f"{RED}✗ Error: {e}{RESET}")
-            retry = input(f"Do you want to add this device anyway? (y/N): ").strip().lower()
-            if retry != 'y':
+                cookie = input(f"{CYAN}Paste Cookie Value{RESET}: ").strip()
+                env_var_name = f"SNS_COOKIE_{dev_id.upper()}"
+                secret_val = cookie
+            
+            print(f"\n{YELLOW}Testing connection to {host}:{port}...{RESET}")
+            
+            success = False
+            try:
+                from stormshield.sns.sslclient import SSLClient
+                from .client.sns_client import CookieSSLClient
+                
+                if auth_method == "cookie":
+                    client = CookieSSLClient._create_patched_client(
+                        host=host,
+                        port=port,
+                        cookie=cookie,
+                        sslverifypeer=False,
+                        sslverifyhost=False,
+                        timeout=10,
+                    )
+                else:
+                    client = SSLClient(
+                        host=host,
+                        port=port,
+                        user=user,
+                        password=password,
+                        sslverifypeer=False,
+                        sslverifyhost=False,
+                        timeout=10,
+                        autoconnect=False
+                    )
+                if client.connect():
+                    print(f"{GREEN}✓ Connection successful!{RESET}")
+                    success = True
+                    try:
+                        client.disconnect()
+                    except Exception:
+                        pass
+                else:
+                    print(f"{RED}✗ Connection failed!{RESET}")
+            except ValueError as e:
+                if str(e) == "AUTH_EXPIRED":
+                    print(f"{RED}✗ Connection failed: Cookie is expired or invalid!{RESET}")
+                else:
+                    print(f"{RED}✗ Error: {e}{RESET}")
+            except Exception as e:
+                print(f"{RED}✗ Error during connection test: {e}{RESET}")
+                
+            if success:
+                break
+                
+            action = input(f"Do you want to [r]etry auth, [a]dd anyway, or [s]kip device? (r/a/S): ").strip().lower()
+            if action == 'a':
+                break
+            elif action == 'r':
                 continue
-        except Exception as e:
-            print(f"{RED}✗ Error during connection test: {e}{RESET}")
-            retry = input(f"Do you want to add this device anyway? (y/N): ").strip().lower()
-            if retry != 'y':
-                continue
+            else:
+                skip_device = True
+                break
+                
+        if skip_device:
+            continue
+
 
         # Save to .env
         env_lines = []
