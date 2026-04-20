@@ -21,6 +21,13 @@ def run_http(
         config_path: Path to config YAML file.
         log_level: Override log level.
     """
+    import sys
+    if sys.platform == "win32":
+        try:
+            sys.stdout.reconfigure(encoding='utf-8')
+        except Exception:
+            pass
+
     config = load_config(config_path)
     mcp, manager = create_server(config_path, log_level)
 

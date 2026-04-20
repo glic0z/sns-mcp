@@ -418,12 +418,25 @@ def create_server(
     Returns:
         Tuple of (FastMCP server, DeviceManager).
     """
+    print("\n\033[96m[1/3] Loading configuration...\033[0m")
     config = load_config(config_path)
 
     if log_level:
         config.logging.level = log_level  # type: ignore[assignment]
 
     setup_logging(config.logging)
+
+    # Warn if using the fallback demo config
+    if getattr(config, "_is_demo_fallback", False):
+        print(
+            "\n\033[93m"
+            "[!] NO CONFIGURATION FILE FOUND\n"
+            "[!] Booting in DEMO mode connected to the public sandbox: sns-demo.stormshield.eu\n"
+            "[!] To connect your own firewalls, run: sns-mcp --setup"
+            "\033[0m\n"
+        )
+    else:
+        print(f"\033[92m      Loaded {len(config.devices)} firewalls from configuration.\033[0m")
 
     # Warn about insecure HTTP binding
     if config.server.host == "0.0.0.0":
@@ -432,6 +445,7 @@ def create_server(
             "to all network interfaces. Use a reverse proxy with TLS in production."
         )
 
+    print("\033[96m[2/3] Connecting to firewalls and probing capabilities...\033[0m")
     manager = DeviceManager(config)
     registry = CapabilityRegistry()
 
@@ -490,6 +504,7 @@ def create_server(
     mcp = FastMCP(config.server.name)
     _register_all_tools(mcp, config, manager, registry)
 
+    print("\033[96m[3/3] Server successfully initialized and ready!\033[0m")
     return mcp, manager
 
 
@@ -541,6 +556,13 @@ def parse_args(args: list[str] | None = None) -> argparse.Namespace:
 
 def main_sync() -> None:
     """Synchronous entry point for the MCP server."""
+    import sys
+    if sys.platform == "win32":
+        try:
+            sys.stdout.reconfigure(encoding='utf-8')
+        except Exception:
+            pass
+
     args = parse_args()
 
     if args.setup:

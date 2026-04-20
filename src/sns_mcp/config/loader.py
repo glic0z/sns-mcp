@@ -104,11 +104,33 @@ def load_config(config_path: str | Path | None = None) -> AppConfig:
             if default_path.exists():
                 path = default_path
                 break
+        
         if path is None:
-            raise FileNotFoundError(
-                "No configuration file found. Searched: "
-                + ", ".join(str(p) for p in _DEFAULT_CONFIG_PATHS)
-            )
+            # Fallback to the public sandbox demo instance
+            import logging
+            logger = logging.getLogger("sns_mcp.loader")
+            logger.info("No configuration found. Falling back to the built-in demo instance configuration.")
+            
+            demo_config = {
+                "logging": {"level": "INFO", "redact_secrets": True},
+                "server": {"name": "sns-mcp-demo", "host": "127.0.0.1", "port": 8000},
+                "devices": {
+                    "live_demo": {
+                        "host": "sns-demo.stormshield.eu",
+                        "port": 443,
+                        "user": "demo",
+                        "password": "demo",
+                        "ssl_verify_host": False,
+                        "ssl_verify_peer": False,
+                        "timeout": 30
+                    }
+                }
+            }
+            demo_config = _resolve_env_vars_in_dict(demo_config)
+            demo_config = _apply_env_overrides(demo_config)
+            config_obj = AppConfig.model_validate(demo_config)
+            config_obj._is_demo_fallback = True  # Used by server.py to print the warning
+            return config_obj
 
     with open(path, encoding="utf-8") as fh:
         raw_data: dict[str, Any] = yaml.safe_load(fh) or {}

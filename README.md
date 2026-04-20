@@ -1,4 +1,4 @@
-# <div align="center">🛡️ stormshield-mcp</div>
+# <div align="center">🛡️ sns-mcp</div>
 
 <div align="center">
   <a href="https://git.io/typing-svg">
@@ -10,7 +10,7 @@
 
 [![License: Apache-2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
 [![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://python.org)
-[![Build Status](https://img.shields.io/github/actions/workflow/status/glic0z/stormshield-mcp/ci.yml?branch=main)](https://github.com/glic0z/stormshield-mcp/actions)
+[![Build Status](https://img.shields.io/github/actions/workflow/status/glic0z/sns-mcp/ci.yml?branch=main)](https://github.com/glic0z/sns-mcp/actions)
 
 > **Disclaimer:** This project is not affiliated with, endorsed by, or supported by Stormshield SAS. "Stormshield" and "SNS" are trademarks of Stormshield SAS.
 
@@ -20,7 +20,7 @@
 
 ## 🚀 What is this?
 
-`stormshield-mcp` is a [Model Context Protocol (MCP)](https://modelcontextprotocol.io/) server that gives AI assistants read-only access to Stormshield SNS firewall data. Ask questions in natural language:
+`sns-mcp` is a [Model Context Protocol (MCP)](https://modelcontextprotocol.io/) server that gives AI assistants read-only access to Stormshield SNS firewall data. Ask questions in natural language:
 
 - *"Show me all filter rules allowing traffic to 10.0.0.0/8"*
 - *"What IPsec tunnels are currently up?"*
@@ -61,8 +61,8 @@ Credentials are never logged, never stored in code, and never returned in any to
 ### 1. Install
 
 ```bash
-git clone https://github.com/glic0z/stormshield-mcp.git
-cd stormshield-mcp
+git clone https://github.com/glic0z/sns-mcp.git
+cd sns-mcp
 pip install -e .
 ```
 
@@ -80,10 +80,10 @@ export PARIS_FW_PASSWORD='your_password'
 
 ```bash
 # STDIO mode (for Claude Desktop)
-stormshield-mcp --config config/config.yaml
+sns-mcp --config config/config.yaml
 
 # HTTP mode (for remote agents)
-stormshield-mcp --config config/config.yaml --transport http
+sns-mcp --config config/config.yaml --transport http
 ```
 
 ### 4. Docker
@@ -105,7 +105,7 @@ Add to your Claude Desktop config (`claude_desktop_config.json`):
 {
   "mcpServers": {
     "stormshield": {
-      "command": "stormshield-mcp",
+      "command": "sns-mcp",
       "args": ["--config", "/path/to/config.yaml"],
       "env": {
         "PARIS_FW_PASSWORD": "your_password_here"
@@ -144,7 +144,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines on adding tools, parsers, 
 
 * **[glicoz](https://github.com/glic0z)** - *Initial work & architecture*
 
-Contributions, issues and feature requests are welcome! Feel free to check the [issues page](https://github.com/glic0z/stormshield-mcp/issues).
+Contributions, issues and feature requests are welcome! Feel free to check the [issues page](https://github.com/glic0z/sns-mcp/issues).
 
 ## License
 
