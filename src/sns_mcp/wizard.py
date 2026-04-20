@@ -65,7 +65,7 @@ def run_setup_wizard(config_path: str = "config/config.yaml"):
             print("1. Log in to your firewall.")
             print("2. Press F12 to open Developer Tools.")
             print("3. Go to the Application/Storage tab -> Cookies.")
-            print("4. Copy the value of the 'user_session_id' cookie.")
+            print("4. Copy the value of the 'SNS_webadmin' cookie.")
             try:
                 webbrowser.open(f"https://{host}:{port}/auth/admin.html")
             except Exception:

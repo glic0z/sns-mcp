@@ -91,7 +91,7 @@ class CookieSSLClient:
                 self.logger.log(logging.INFO, 'Connecting to %s on port %d with cookie', self.host, self.port)
 
                 # Inject the cookie into the session
-                self.session.cookies.set("user_session_id", self._cookie_val)
+                self.session.cookies.set("SNS_webadmin", self._cookie_val)
 
                 # 2. Serverd session (Skip Step 1 Auth completely)
                 data = {'app': self.app, 'id': 0}
