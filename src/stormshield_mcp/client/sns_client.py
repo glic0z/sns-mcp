@@ -118,8 +118,8 @@ class SNSClient:
                 port=self._port,
                 user=self._user,
                 password=self._password,
-                sslverifypeer=self._verify_cert,
-                sslverifyhost=self._verify_cert,
+                sslverifypeer=self._sslverifypeer,
+                sslverifyhost=self._sslverifyhost,
                 timeout=self._timeout,
                 autoconnect=False,
             )
