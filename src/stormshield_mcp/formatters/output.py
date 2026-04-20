@@ -214,6 +214,21 @@ def safe_tool_call(
             "Authentication failed. Check credentials in config.",
         )
     except Exception as e:
+        # Avoid stack trace for expected CommandErrors
+        error_name = type(e).__name__
+        if error_name == "CommandError":
+            return make_error(
+                device_id,
+                tool_name,
+                f"Appliance rejected the command: {e}"
+            )
+        elif error_name == "ServerError":
+            return make_error(
+                device_id,
+                tool_name,
+                f"Connection or session limit error: {e}"
+            )
+
         logger.exception("Unexpected error in %s for %s", tool_name, device_id)
         return make_error(
             device_id,

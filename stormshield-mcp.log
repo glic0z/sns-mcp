@@ -2,3 +2,5 @@
 {"timestamp": "2026-04-20 15:21:27,095", "level": "WARNING", "logger": "stormshield_mcp.capabilities.probe", "message": "[live_demo] Skipping probe — device unreachable: Cannot reach device 'live_demo': Failed to connect to sns-demo.stormshield.eu:443"}
 {"timestamp": "2026-04-20 15:22:10,913", "level": "INFO", "logger": "stormshield_mcp.client", "message": "Connected to SNS device at sns-demo.stormshield.eu:443"}
 {"timestamp": "2026-04-20 15:22:11,316", "level": "INFO", "logger": "stormshield_mcp.capabilities.probe", "message": "[live_demo] Capability probe complete: 0/19 available"}
+{"timestamp": "2026-04-20 15:23:03,890", "level": "INFO", "logger": "stormshield_mcp.client", "message": "Connected to SNS device at sns-demo.stormshield.eu:443"}
+{"timestamp": "2026-04-20 15:23:04,365", "level": "INFO", "logger": "stormshield_mcp.capabilities.probe", "message": "[live_demo] Capability probe complete: 0/19 available"}
