@@ -75,7 +75,7 @@ def setup_logging(config: LoggingConfig | None = None) -> None:
         fmt = config.format
         log_file = config.file
 
-    root_logger = logging.getLogger("stormshield_mcp")
+    root_logger = logging.getLogger("sns_mcp")
     root_logger.setLevel(getattr(logging, level_str, logging.INFO))
 
     # Remove any existing handlers

@@ -32,7 +32,7 @@ Map of device_id → device configuration. At least one device must be configure
 
 | Field | Type | Default | Description |
 |---|---|---|---|
-| `name` | string | stormshield-mcp | Server name |
+| `name` | string | sns-mcp | Server name |
 | `version` | string | 0.1.0 | Server version |
 | `host` | string | 127.0.0.1 | HTTP bind address |
 | `port` | integer | 8765 | HTTP port |

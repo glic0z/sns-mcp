@@ -15,7 +15,7 @@ from .config.loader import load_config
 from .config.models import AppConfig
 from .logging_config import setup_logging
 
-logger = logging.getLogger("stormshield_mcp.server")
+logger = logging.getLogger("sns_mcp.server")
 
 
 def _register_all_tools(
@@ -503,7 +503,7 @@ def parse_args(args: list[str] | None = None) -> argparse.Namespace:
         Parsed arguments namespace.
     """
     parser = argparse.ArgumentParser(
-        prog="stormshield-mcp",
+        prog="sns-mcp",
         description="Read-only MCP server for Stormshield SNS firewalls",
     )
     parser.add_argument(
@@ -530,6 +530,12 @@ def parse_args(args: list[str] | None = None) -> argparse.Namespace:
         action="store_true",
         help="Run the interactive configuration wizard",
     )
+    parser.add_argument(
+        "--daemon",
+        "-d",
+        action="store_true",
+        help="Run the MCP server in the background (detached)",
+    )
     return parser.parse_args(args)
 
 
@@ -540,6 +546,26 @@ def main_sync() -> None:
     if args.setup:
         from .wizard import run_setup_wizard
         run_setup_wizard(args.config or "config/config.yaml")
+        return
+
+    if args.daemon:
+        import sys
+        import subprocess
+        
+        cmd = [sys.executable, "-m", "sns_mcp.server"]
+        if args.config:
+            cmd.extend(["--config", args.config])
+        cmd.extend(["--transport", args.transport])
+        if args.log_level:
+            cmd.extend(["--log-level", args.log_level])
+            
+        print("\nStarting SNS MCP server in the background...")
+        if sys.platform == "win32":
+            subprocess.Popen(cmd, creationflags=subprocess.DETACHED_PROCESS)
+        else:
+            subprocess.Popen(cmd, start_new_session=True)
+            
+        print("Server successfully detached. You can close this terminal.\n")
         return
 
     if args.transport == "http":

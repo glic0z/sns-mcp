@@ -10,8 +10,8 @@ from unittest.mock import MagicMock
 
 import pytest
 
-from stormshield_mcp.client.sns_client import SNSResponse
-from stormshield_mcp.config.models import AppConfig, DeviceConfig
+from sns_mcp.client.sns_client import SNSResponse
+from sns_mcp.config.models import AppConfig, DeviceConfig
 
 FIXTURES_DIR = Path(__file__).parent / "fixtures"
 

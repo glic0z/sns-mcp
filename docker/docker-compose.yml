@@ -1,11 +1,11 @@
 version: "3.8"
 
 services:
-  stormshield-mcp:
+  sns-mcp:
     build:
       context: ..
       dockerfile: docker/Dockerfile
-    container_name: stormshield-mcp
+    container_name: sns-mcp
     restart: unless-stopped
     ports:
       - "8765:8765"
@@ -16,7 +16,7 @@ services:
       - LYON_FW_PASSWORD=${LYON_FW_PASSWORD:-changeme}
     command: ["--config", "/app/config/config.yaml", "--transport", "http"]
     healthcheck:
-      test: ["CMD", "python", "-c", "from stormshield_mcp.config.loader import load_config; load_config('/app/config/config.yaml')"]
+      test: ["CMD", "python", "-c", "from sns_mcp.config.loader import load_config; load_config('/app/config/config.yaml')"]
       interval: 30s
       timeout: 10s
       retries: 3

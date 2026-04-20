@@ -1,5 +1,5 @@
 # SPDX-License-Identifier: Apache-2.0
-"""Pydantic configuration models for stormshield-mcp."""
+"""Pydantic configuration models for sns-mcp."""
 
 from __future__ import annotations
 
@@ -51,7 +51,7 @@ class DeviceConfig(BaseModel):
 class ServerConfig(BaseModel):
     """MCP server configuration."""
 
-    name: str = "stormshield-mcp"
+    name: str = "sns-mcp"
     version: str = "0.1.0"
     host: str = "127.0.0.1"
     port: int = 8765

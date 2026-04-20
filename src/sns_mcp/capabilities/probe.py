@@ -11,7 +11,7 @@ if TYPE_CHECKING:
     from ..client.sns_client import SNSClient
     from ..config.models import AppConfig
 
-logger = logging.getLogger("stormshield_mcp.capabilities.probe")
+logger = logging.getLogger("sns_mcp.capabilities.probe")
 
 # Maps capability keys to the SNS CLI command used to probe them.
 CAPABILITY_PROBES: dict[str, str] = {

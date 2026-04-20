@@ -8,7 +8,7 @@ import logging
 from dataclasses import dataclass, field
 from typing import Any, Protocol
 
-logger = logging.getLogger("stormshield_mcp.client")
+logger = logging.getLogger("sns_mcp.client")
 
 
 @dataclass

@@ -1,4 +1,4 @@
-# stormshield-mcp configuration
+# sns-mcp configuration
 # Copy to config.yaml and set chmod 600 config.yaml
 
 devices:
@@ -33,7 +33,7 @@ devices:
       - edge
 
 server:
-  name: "stormshield-mcp"
+  name: "sns-mcp"
   version: "0.1.0"
   # HTTP transport settings (server_http.py only)
   host: "127.0.0.1"                      # NEVER expose on 0.0.0.0 without auth

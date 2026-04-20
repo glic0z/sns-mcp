@@ -28,8 +28,8 @@ EXPOSE 8765
 
 # Health check using the device list tool
 HEALTHCHECK --interval=30s --timeout=10s --start-period=10s --retries=3 \
-    CMD python -c "from stormshield_mcp.config.loader import load_config; load_config('/app/config/config.yaml')" || exit 1
+    CMD python -c "from sns_mcp.config.loader import load_config; load_config('/app/config/config.yaml')" || exit 1
 
 # Default: STDIO mode. Override CMD for HTTP mode.
-ENTRYPOINT ["stormshield-mcp"]
+ENTRYPOINT ["sns-mcp"]
 CMD ["--config", "/app/config/config.yaml"]

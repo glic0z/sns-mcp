@@ -9,8 +9,8 @@ from pathlib import Path
 import pytest
 import yaml
 
-from stormshield_mcp.config.loader import load_config
-from stormshield_mcp.config.models import AppConfig, DeviceConfig
+from sns_mcp.config.loader import load_config
+from sns_mcp.config.models import AppConfig, DeviceConfig
 
 
 class TestDeviceConfig:

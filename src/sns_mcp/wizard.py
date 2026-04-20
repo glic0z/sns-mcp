@@ -25,7 +25,7 @@ def run_setup_wizard(config_path: str = "config/config.yaml"):
     else:
         config = {
             "logging": {"level": "INFO", "redact_secrets": True},
-            "server": {"name": "stormshield-mcp", "host": "127.0.0.1", "port": 8000},
+            "server": {"name": "sns-mcp", "host": "127.0.0.1", "port": 8000},
             "devices": {}
         }
         
@@ -117,5 +117,5 @@ def run_setup_wizard(config_path: str = "config/config.yaml"):
             break
 
     print(f"\n{CYAN}=== Wizard Complete ==={RESET}")
-    print(f"You can now run the MCP server with: {GREEN}stormshield-mcp --config {config_path}{RESET}")
+    print(f"You can now run the MCP server with: {GREEN}sns-mcp --config {config_path}{RESET}")
     sys.exit(0)

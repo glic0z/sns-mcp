@@ -10,7 +10,7 @@ from dataclasses import asdict, dataclass, field
 from datetime import UTC, datetime
 from typing import Any
 
-logger = logging.getLogger("stormshield_mcp.formatters")
+logger = logging.getLogger("sns_mcp.formatters")
 
 
 @dataclass

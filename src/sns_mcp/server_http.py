@@ -8,7 +8,7 @@ import logging
 from .config.loader import load_config
 from .server import create_server
 
-logger = logging.getLogger("stormshield_mcp.server_http")
+logger = logging.getLogger("sns_mcp.server_http")
 
 
 def run_http(

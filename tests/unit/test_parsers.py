@@ -4,19 +4,19 @@
 from __future__ import annotations
 
 from conftest import load_fixture
-from stormshield_mcp.parsers.filter_rules import FilterRuleParser
-from stormshield_mcp.parsers.interfaces import InterfaceParser
-from stormshield_mcp.parsers.nat_rules import NatRuleParser
-from stormshield_mcp.parsers.objects import ObjectParser, ServiceParser
-from stormshield_mcp.parsers.routing import RoutingParser
-from stormshield_mcp.parsers.system import (
+from sns_mcp.parsers.filter_rules import FilterRuleParser
+from sns_mcp.parsers.interfaces import InterfaceParser
+from sns_mcp.parsers.nat_rules import NatRuleParser
+from sns_mcp.parsers.objects import ObjectParser, ServiceParser
+from sns_mcp.parsers.routing import RoutingParser
+from sns_mcp.parsers.system import (
     AuthConfigParser,
     MonitorStatParser,
     SystemHAParser,
     SystemLicenseParser,
     SystemPropertyParser,
 )
-from stormshield_mcp.parsers.vpn import (
+from sns_mcp.parsers.vpn import (
     VpnIpsecConfigParser,
     VpnIpsecSAParser,
 )

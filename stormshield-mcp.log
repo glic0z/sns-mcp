@@ -6,3 +6,5 @@
 {"timestamp": "2026-04-20 15:23:04,365", "level": "INFO", "logger": "stormshield_mcp.capabilities.probe", "message": "[live_demo] Capability probe complete: 0/19 available"}
 {"timestamp": "2026-04-20 15:35:16,453", "level": "INFO", "logger": "stormshield_mcp.client", "message": "Connected to SNS device at sns-demo.stormshield.eu:443"}
 {"timestamp": "2026-04-20 15:35:16,785", "level": "INFO", "logger": "stormshield_mcp.capabilities.probe", "message": "[live_demo] Capability probe complete: 0/19 available"}
+{"timestamp": "2026-04-20 15:42:41,430", "level": "INFO", "logger": "stormshield_mcp.client", "message": "Connected to SNS device at sns-demo.stormshield.eu:443"}
+{"timestamp": "2026-04-20 15:42:41,777", "level": "INFO", "logger": "stormshield_mcp.capabilities.probe", "message": "[live_demo] Capability probe complete: 0/19 available"}

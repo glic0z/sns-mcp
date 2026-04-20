@@ -1,6 +1,6 @@
 # Adding a New Tool
 
-This guide walks through adding a new MCP tool to stormshield-mcp.
+This guide walks through adding a new MCP tool to sns-mcp.
 
 ## Prerequisites
 
@@ -12,7 +12,7 @@ This guide walks through adding a new MCP tool to stormshield-mcp.
 
 ### 1. Create or Update the Parser
 
-In `src/stormshield_mcp/parsers/`, create or update the appropriate parser:
+In `src/sns_mcp/parsers/`, create or update the appropriate parser:
 
 ```python
 # parsers/your_module.py
@@ -32,7 +32,7 @@ class YourParser(BaseParser):
 
 ### 2. Create the Tool Function
 
-In `src/stormshield_mcp/tools/`, add the tool function:
+In `src/sns_mcp/tools/`, add the tool function:
 
 ```python
 def sns_your_noun_verb(manager, device_id, **kwargs):
@@ -51,7 +51,7 @@ def sns_your_noun_verb(manager, device_id, **kwargs):
 
 ### 3. Register in server.py
 
-Add the tool to `_register_all_tools()` in `src/stormshield_mcp/server.py`:
+Add the tool to `_register_all_tools()` in `src/sns_mcp/server.py`:
 
 ```python
 @mcp.tool()
@@ -63,7 +63,7 @@ def sns_your_noun_verb(device_id: str) -> str:
 ### 4. Add Capability Probe (if needed)
 
 If the command may not be available on all devices, add a probe in
-`src/stormshield_mcp/capabilities/probe.py`:
+`src/sns_mcp/capabilities/probe.py`:
 
 ```python
 CAPABILITY_PROBES["your_feature"] = "YOUR COMMAND"

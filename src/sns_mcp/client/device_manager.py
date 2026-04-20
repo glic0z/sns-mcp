@@ -11,7 +11,7 @@ from .sns_client import SNSClient, SNSResponse
 if TYPE_CHECKING:
     from ..config.models import AppConfig
 
-logger = logging.getLogger("stormshield_mcp.client.device_manager")
+logger = logging.getLogger("sns_mcp.client.device_manager")
 
 
 class DeviceNotFoundError(Exception):

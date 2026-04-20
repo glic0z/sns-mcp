@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "stormshield-mcp configuration",
+  "title": "sns-mcp configuration",
   "type": "object",
   "required": ["devices"],
   "properties": {
@@ -28,7 +28,7 @@
     "server": {
       "type": "object",
       "properties": {
-        "name": {"type": "string", "default": "stormshield-mcp"},
+        "name": {"type": "string", "default": "sns-mcp"},
         "version": {"type": "string", "default": "0.1.0"},
         "host": {"type": "string", "default": "127.0.0.1"},
         "port": {"type": "integer", "default": 8765},

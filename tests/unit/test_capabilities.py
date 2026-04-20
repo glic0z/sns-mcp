@@ -5,9 +5,9 @@ from __future__ import annotations
 
 from unittest.mock import MagicMock
 
-from stormshield_mcp.capabilities.probe import CAPABILITY_PROBES, probe_device
-from stormshield_mcp.capabilities.registry import CapabilityRegistry
-from stormshield_mcp.client.sns_client import SNSResponse
+from sns_mcp.capabilities.probe import CAPABILITY_PROBES, probe_device
+from sns_mcp.capabilities.registry import CapabilityRegistry
+from sns_mcp.client.sns_client import SNSResponse
 
 
 class TestProbeDevice:

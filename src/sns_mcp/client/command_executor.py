@@ -8,7 +8,7 @@ import re
 
 from .sns_client import SNSClient, SNSResponse
 
-logger = logging.getLogger("stormshield_mcp.client.command_executor")
+logger = logging.getLogger("sns_mcp.client.command_executor")
 
 # Commands that would modify device configuration — BLOCKED
 WRITE_COMMAND_PREFIXES = (
@@ -107,7 +107,7 @@ def assert_read_only(command: str) -> None:
         if upper.startswith(prefix):
             raise ReadOnlyViolationError(
                 f"SAFETY VIOLATION: Write command blocked: {command!r}. "
-                "stormshield-mcp is a read-only tool."
+                "sns-mcp is a read-only tool."
             )
 
 

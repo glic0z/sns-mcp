@@ -10,15 +10,15 @@ from unittest.mock import MagicMock
 import pytest
 
 from conftest import load_fixture
-from stormshield_mcp.client.command_executor import (
+from sns_mcp.client.command_executor import (
     ReadOnlyViolationError,
     assert_read_only,
     sanitize_input,
 )
-from stormshield_mcp.formatters.output import ToolResponse, paginate, safe_tool_call
-from stormshield_mcp.logging_config import SensitiveFilter
-from stormshield_mcp.tools import policy as pol_tools
-from stormshield_mcp.tools import system as sys_tools
+from sns_mcp.formatters.output import ToolResponse, paginate, safe_tool_call
+from sns_mcp.logging_config import SensitiveFilter
+from sns_mcp.tools import policy as pol_tools
+from sns_mcp.tools import system as sys_tools
 
 # ═══════════════════════════════════════════════════════
 # Read-Only Guard Tests
@@ -248,7 +248,7 @@ class TestSafeToolCall:
 
     def test_device_not_found(self) -> None:
         """DeviceNotFoundError becomes error JSON."""
-        from stormshield_mcp.client.device_manager import DeviceNotFoundError
+        from sns_mcp.client.device_manager import DeviceNotFoundError
 
         def _raise() -> ToolResponse:
             raise DeviceNotFoundError("unknown-fw")
@@ -259,7 +259,7 @@ class TestSafeToolCall:
 
     def test_capability_unavailable(self) -> None:
         """CapabilityUnavailableError becomes capability_unavailable JSON."""
-        from stormshield_mcp.client.command_executor import CapabilityUnavailableError
+        from sns_mcp.client.command_executor import CapabilityUnavailableError
 
         def _raise() -> ToolResponse:
             raise CapabilityUnavailableError("ztna", "fw1", "Not supported on SNS 4.x")
@@ -333,7 +333,7 @@ class TestFilterRulesTool:
 
     def test_invalid_device_id(self, mock_manager: MagicMock) -> None:
         """Invalid device returns error JSON, not exception."""
-        from stormshield_mcp.client.device_manager import DeviceNotFoundError
+        from sns_mcp.client.device_manager import DeviceNotFoundError
 
         mock_manager.get_client.side_effect = DeviceNotFoundError("bad-id")
 

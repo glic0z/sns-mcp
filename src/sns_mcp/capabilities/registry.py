@@ -5,7 +5,7 @@ from __future__ import annotations
 
 import logging
 
-logger = logging.getLogger("stormshield_mcp.capabilities.registry")
+logger = logging.getLogger("sns_mcp.capabilities.registry")
 
 
 class CapabilityRegistry:
